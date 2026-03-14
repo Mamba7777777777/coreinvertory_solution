@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoreInventory</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+
+  <div id="auth-screen" class="auth-shell">
+    <div class="auth-card">
+      <h1>CoreInventory</h1>
+      <p class="muted">Centralized real-time inventory operations</p>
+
+      <div class="auth-tabs">
+        <button id="tab-login" class="tab active">Login</button>
+        <button id="tab-signup" class="tab">Sign Up</button>
+        <button id="tab-reset" class="tab">Reset Password</button>
+      </div>
+
+      <form id="login-form" class="form">
+        <input id="login-email" type="email" placeholder="Email" required />
+        <input id="login-password" type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <form id="signup-form" class="form hidden">
+        <input id="signup-name" placeholder="Full name" required />
+        <input id="signup-email" type="email" placeholder="Email" required />
+        <input id="signup-password" type="password" placeholder="Password" required />
+        <select id="signup-role">
+          <option value="manager">Inventory Manager</option>
+          <option value="staff">Warehouse Staff</option>
+        </select>
+        <button type="submit">Create Account</button>
+      </form>
+
+      <form id="reset-form" class="form hidden">
+        <input id="reset-email" type="email" placeholder="Email" required />
+        <div class="row-inline">
+          <button id="request-otp" type="button" class="secondary">Request OTP</button>
+          <input id="reset-otp" placeholder="OTP" maxlength="6" />
+        </div>
+        <input id="reset-new-password" type="password" placeholder="New password" required />
+        <button type="submit">Reset Password</button>
+        <p id="otp-hint" class="muted"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="app" class="app-shell hidden">
+    <aside class="sidebar">
+      <h2>CoreInventory</h2>
+      <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+      <button class="nav-btn" data-view="products">Products</button>
+      <button class="nav-btn" data-view="operations">Operations</button>
+      <button class="nav-btn" data-view="settings">Settings</button>
+      <button class="nav-btn" data-view="profile">My Profile</button>
+      <button id="logout" class="danger">Logout</button>
+    </aside>
+
+    <main class="main">
+      <header class="header">
+        <h1 id="page-title">Dashboard</h1>
+      </header>
+
+      <section id="view-dashboard" class="view"></section>
+      <section id="view-products" class="view hidden"></section>
+      <section id="view-operations" class="view hidden"></section>
+      <section id="view-settings" class="view hidden"></section>
+      <section id="view-profile" class="view hidden"></section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

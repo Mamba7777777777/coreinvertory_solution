@@ -1,0 +1,210 @@
+COREINVENTORY VIDEO SHOOT SCRIPT (STEP BY STEP)
+
+0) PRE-CHECK BEFORE RECORDING
+1. Open terminal in project folder.
+2. Run server:
+	c:\Users\Admin\Desktop\coreinventory\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8010 --reload
+3. Open app in browser:
+	http://127.0.0.1:8010
+4. Hard refresh browser once:
+	Ctrl + F5
+5. Check server terminal shows no crash.
+
+WORKING CHECK:
+- If login/signup page opens, app is running properly.
+- Database is empty — no pre-seeded data, everything is created fresh.
+
+
+1) SIGN UP (MANAGER ACCOUNT)
+Enter:
+- Name: Satish Manager
+- Email: satish.manager.demo@example.com
+- Password: Demo@123
+- Role: Inventory Manager
+Click Create Account.
+
+WORKING CHECK:
+- You should enter dashboard after signup.
+- If error says email already registered, use a new email and retry.
+
+
+2) RESET PASSWORD DEMO (OPTIONAL BUT GOOD FOR VIDEO)
+1. Logout.
+2. Go to Reset Password tab.
+3. Enter same manager email.
+4. Click Request OTP.
+5. OTP will appear on screen automatically (auto-filled in field).
+6. New password: Demo@1234
+7. Click Reset Password.
+8. Login again using new password.
+
+WORKING CHECK:
+- OTP appears on screen in a green box and is auto-filled.
+- Success toast after reset.
+- Login works with new password.
+
+
+3) SETTINGS MASTER DATA (CREATE FIRST — DATABASE IS EMPTY)
+Go to Settings and create everything from scratch:
+
+A) Warehouses (Create Warehouse section)
+- Type: Main Warehouse  → Click Create
+- Type: Warehouse 2     → Click Create
+
+B) Locations (Create Location section)
+- Select: Main Warehouse | Name: Main Store    | Code: MAIN-STORE  → Click Create
+- Select: Main Warehouse | Name: Rack A        | Code: RACK-A      → Click Create
+- Select: Main Warehouse | Name: Rack B        | Code: RACK-B      → Click Create
+- Select: Warehouse 2   | Name: Secondary Store| Code: SEC-STORE   → Click Create
+
+C) Categories (Create Product Category section)
+- Type: Raw Material    → Click Create
+- Type: Finished Goods  → Click Create
+
+WORKING CHECK:
+- Each created entry appears immediately in the tables below on the same page.
+- No pre-existing data — everything you see was just created.
+
+
+4) PRODUCTS (CREATE + SEARCH + AVAILABILITY + EDIT)
+Go to Products and create:
+
+Product 1:
+- Name: Steel Rod
+- SKU: STEEL-001
+- Category: Raw Material
+- UOM: kg
+- Reorder Level: 20
+- Initial Stock: 100
+- Initial Location: Main Store
+Click Create Product.
+
+Product 2:
+- Name: Chair Frame
+- SKU: FRAME-001
+- Category: Finished Goods
+- UOM: pcs
+- Reorder Level: 10
+- Initial Stock: 30
+- Initial Location: Rack A
+Click Create Product.
+
+Then show:
+- Search by name/SKU: type STEEL → list filters
+- Category filter: select Raw Material
+- Stock by Location: click View on Steel Rod → shows Main Store qty
+- Edit: click Edit on Steel Rod → change Reorder Level to 25 → click Update Product
+
+WORKING CHECK:
+- Product list updates after each create.
+- Edited reorder level shows 25 after save.
+
+
+5) OPERATIONS FLOW (MAIN PART OF VIDEO)
+
+A) RECEIPT (Incoming)
+Click tab: Receipts
+Fill in:
+- Receiving Location *: Main Store
+- Supplier Name: ABC Metals
+- Reference: GRN-1001
+Add line:
+- Product: Steel Rod | Planned Qty: 50 | Done Qty: 50 → Click Add line
+Click Create Document → then Click Validate
+
+WORKING CHECK:
+- Status becomes done
+- Steel Rod stock increases
+- Ledger entry appears in Move History
+
+
+B) INTERNAL TRANSFER
+Click tab: Internal Transfers
+Fill in:
+- From Location *: Main Store
+- To Location *: Rack B
+- Reference: TRF-2001
+Add line:
+- Product: Steel Rod | Planned Qty: 40 | Done Qty: 40 → Click Add line
+Click Create Document → then Click Validate
+
+WORKING CHECK:
+- Status becomes done
+- Total stock unchanged, location-wise stock shifted
+- Ledger shows source negative and destination positive rows
+
+
+C) DELIVERY ORDER (Pick → Pack → Validate)
+Click tab: Delivery Orders
+Fill in:
+- Dispatch Location *: Rack A
+- Customer Name: Customer One
+- Reference: SO-3001
+Add line:
+- Product: Chair Frame | Planned Qty: 5 | Done Qty: 5 → Click Add line
+Click Create Document
+→ Status is draft → Click Pick   (status becomes waiting)
+→ Status is waiting → Click Pack  (status becomes ready)
+→ Status is ready   → Click Validate
+
+WORKING CHECK:
+- Validate button is NOT visible until after Pack (ready status)
+- Final status = done
+- Chair Frame stock decreases
+
+
+D) STOCK ADJUSTMENT
+Click tab: Inventory Adjustment
+Fill in:
+- Location to Adjust *: Main Store
+- Reference: ADJ-4001
+Add line:
+- Product: Steel Rod | Done Qty: 97 → Click Add line
+Click Create Document → then Click Validate
+
+WORKING CHECK:
+- Status becomes done
+- System auto-calculates difference and applies it
+- Ledger shows adjustment movement
+
+
+6) DASHBOARD FINAL PROOF
+Go to Dashboard and show:
+- KPI cards (Total Products, Low Stock, Pending Receipts, Deliveries, Transfers)
+- Apply Filters: try Document Type = Receipt → Apply
+- Low Stock Alerts table
+- Recent Stock Movements table
+- Filtered Operations list
+
+WORKING CHECK:
+- KPI values reflect all operations done above.
+- Filters correctly change what is shown.
+
+
+7) ROLE DEMO (VERY IMPORTANT)
+1. Logout.
+2. Sign up as staff:
+	- Name: Ravi Staff
+	- Email: staff.demo@example.com
+	- Password: Demo@123
+	- Role: Warehouse Staff
+3. Go to Settings → form inputs are disabled, message says manager only.
+4. Go to Products → Create/Edit buttons are hidden, message says manager only.
+
+WORKING CHECK:
+- Staff cannot create warehouses, locations, categories, or products.
+- Staff CAN still go to Operations and use the operations flow.
+
+
+8) COMMON ERROR FIXES (FOR SHOOT DAY)
+- Password must be at least 6 characters.
+- OTP must be 6 digits.
+- Keep backend terminal running while using the app.
+- If UI looks stale or data not showing, press Ctrl + F5.
+- If signup fails due to duplicate email, use a different email.
+- If server is not reachable, re-run the server command from step 0.
+- Operations form labels now show exactly what each field means — read them before filling.
+
+
+9) ENDING LINE FOR VIDEO
+"CoreInventory successfully digitizes complete inventory operations: authentication, product master, multi-warehouse stock, receipts, transfers, delivery with pick-pack-validate, stock adjustments, role controls, real-time dashboard KPIs, and stock ledger history."
